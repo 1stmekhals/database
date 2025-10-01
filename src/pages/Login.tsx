@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { BookOpen } from 'lucide-react';
@@ -8,8 +8,14 @@ export function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
+  const { signIn, user, profile } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && profile && profile.status === 'approved') {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [user, profile, navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
