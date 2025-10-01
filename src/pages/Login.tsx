@@ -22,13 +22,21 @@ export function Login() {
     setError('');
     setLoading(true);
 
-    const { error } = await signIn(email, password);
+    try {
+      const { error } = await signIn(email, password);
 
-    if (error) {
-      setError(error.message);
+      if (error) {
+        console.error('Login error:', error);
+        setError(error.message);
+        setLoading(false);
+      } else {
+        console.log('Login successful, navigating to dashboard');
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      setError('An unexpected error occurred');
       setLoading(false);
-    } else {
-      navigate('/dashboard');
     }
   }
 
