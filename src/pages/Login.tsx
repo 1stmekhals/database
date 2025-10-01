@@ -12,7 +12,9 @@ export function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('Login useEffect - user:', user, 'profile:', profile);
     if (user && profile && profile.status === 'approved') {
+      console.log('Already authenticated, redirecting to dashboard');
       navigate('/dashboard', { replace: true });
     }
   }, [user, profile, navigate]);
