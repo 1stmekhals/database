@@ -13,6 +13,7 @@ import { Branches } from './pages/Branches';
 import { Classrooms } from './pages/Classrooms';
 import { Library } from './pages/Library';
 import { Reports } from './pages/Reports';
+import { Profile } from './pages/Profile';
 
 function App() {
   return (
@@ -48,7 +49,7 @@ function App() {
           <Route
             path="/staff"
             element={
-              <ProtectedRoute requireStaff>
+              <ProtectedRoute requireAdmin>
                 <Layout>
                   <Staff />
                 </Layout>
@@ -59,7 +60,7 @@ function App() {
           <Route
             path="/students"
             element={
-              <ProtectedRoute requireStaff>
+              <ProtectedRoute requireAdmin>
                 <Layout>
                   <Students />
                 </Layout>
@@ -81,7 +82,7 @@ function App() {
           <Route
             path="/classrooms"
             element={
-              <ProtectedRoute requireStaff>
+              <ProtectedRoute>
                 <Layout>
                   <Classrooms />
                 </Layout>
@@ -92,7 +93,7 @@ function App() {
           <Route
             path="/libraries/books"
             element={
-              <ProtectedRoute requireStaff>
+              <ProtectedRoute>
                 <Layout>
                   <Library />
                 </Layout>
@@ -103,9 +104,20 @@ function App() {
           <Route
             path="/reports"
             element={
-              <ProtectedRoute requireStaff>
+              <ProtectedRoute requireAdmin>
                 <Layout>
                   <Reports />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Profile />
                 </Layout>
               </ProtectedRoute>
             }

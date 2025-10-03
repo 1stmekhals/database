@@ -16,13 +16,29 @@ export function Staff() {
 
   async function loadStaff() {
     try {
-      const { data, error } = await supabase
-        .from('staff')
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
         .select('*')
+        .in('role_id', ['admin', 'staff'])
+        .eq('status', 'active')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setStaff(data || []);
+      if (profilesError) throw profilesError;
+
+      const staffData = (profilesData || []).map((profile) => ({
+        id: profile.id,
+        profile_id: profile.id,
+        first_name: profile.full_name?.split(' ')[0] || '',
+        last_name: profile.full_name?.split(' ').slice(1).join(' ') || '',
+        position: profile.role_id === 'admin' ? 'Administrator' : 'Staff',
+        phone: profile.phone || '',
+        email: profile.email || '',
+        date_joined: profile.created_at,
+        status: profile.status,
+        created_at: profile.created_at,
+      }));
+
+      setStaff(staffData as Staff[]);
     } catch (error) {
       console.error('Error loading staff:', error);
     } finally {
