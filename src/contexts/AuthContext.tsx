@@ -86,6 +86,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signUp(email: string, password: string, role: string, formData: any) {
+    console.log('Starting signup process for:', email, 'role:', role);
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -97,29 +99,54 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
     });
 
-    if (error) return { error };
+    if (error) {
+      console.error('Auth signup error:', error);
+      return { error };
+    }
+
+    console.log('Auth user created:', data.user?.id);
 
     if (data.user) {
+      const profileInsert = {
+        auth_user_id: data.user.id,
+        email,
+        full_name: formData.full_name || `${formData.first_name || ''} ${formData.last_name || ''}`.trim(),
+        role_id: role,
+        status: 'pending',
+      };
+
+      console.log('Inserting profile:', profileInsert);
+
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .insert({
-          auth_user_id: data.user.id,
-          email,
-          full_name: formData.full_name || `${formData.first_name || ''} ${formData.last_name || ''}`.trim(),
-          role_id: role,
-          status: 'pending',
-        })
+        .insert(profileInsert)
         .select()
         .single();
 
-      if (profileError) return { error: profileError };
+      if (profileError) {
+        console.error('Profile creation error:', profileError);
+        return { error: profileError };
+      }
 
-      await supabase.from('approvals').insert({
+      console.log('Profile created:', profileData);
+
+      const approvalInsert = {
         requester_profile_id: profileData.id,
         target_role: role,
         status: 'pending',
         submitted_payload: formData,
-      });
+      };
+
+      console.log('Inserting approval:', approvalInsert);
+
+      const { error: approvalError } = await supabase.from('approvals').insert(approvalInsert);
+
+      if (approvalError) {
+        console.error('Approval creation error:', approvalError);
+        return { error: approvalError };
+      }
+
+      console.log('Signup complete!');
     }
 
     return { error: null };
