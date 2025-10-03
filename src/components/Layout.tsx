@@ -1,22 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import {
-  BookOpen,
-  LayoutDashboard,
-  Users,
-  UserCheck,
-  Building2,
-  GraduationCap,
-  Library,
-  FileText,
-  Bell,
-  LogOut,
-  Menu,
-  X,
-  CheckCircle,
-  UserCircle,
-} from 'lucide-react';
+import { BookOpen, LayoutDashboard, Users, UserCheck, Building2, GraduationCap, Library, FileText, Bell, LogOut, Menu, X, CheckCircle, CircleUser as UserCircle } from 'lucide-react';
 
 interface LayoutProps {
   children: ReactNode;
