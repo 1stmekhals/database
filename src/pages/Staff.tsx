@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { UserCheck, Search, Plus, Edit, Eye, ShieldCheck, Trash2, X, Mail, Phone, MapPin, Calendar, User } from 'lucide-react';
+import { UserCheck, Search, Plus, CreditCard as Edit, Eye, ShieldCheck, Trash2, X, Mail, Phone, MapPin, Calendar, User } from 'lucide-react';
 
 interface StaffMember {
   id: string;
